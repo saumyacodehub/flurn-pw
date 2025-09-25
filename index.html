@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KA Value</title>
+  <meta name="description" content="Public page that computes 56 + (time-24hrs) + KA + (date+5) in Asia/Kolkata timezone." />
+  <style>
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji'; background: #0b1220; color: #e7eefb;}
+    .wrap { min-height: 100%; display: grid; place-items: center; padding: 2rem;}
+    .card { background: #121a2b; border: 1px solid #1b2640; border-radius: 18px; padding: 2rem; max-width: 680px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,.25);}
+    h1 { margin: 0 0 0.25rem 0; font-size: 1.4rem; color: #9fc5ff; letter-spacing: .4px;}
+    .value { font-size: clamp(2rem, 6.5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin: .4rem 0 1rem 0; word-break: break-word;}
+    .meta { font-size: .95rem; opacity: .9; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .foot { margin-top: 1rem; font-size: .85rem; opacity: .7;}
+    .pill { display: inline-block; padding: .25rem .5rem; border-radius: 999px; background: #0e1628; border: 1px solid #1b2640; margin-right: .5rem;}
+    .grid { display: grid; grid-template-columns: 1fr; gap: .75rem;}
+    @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Computed Value</h1>
+      <div id="result" class="value mono">—</div>
+      <div class="grid meta">
+        <div><span class="pill mono">Formula</span> <span class="mono">56 + (hour−24) + "KA" + (day+5)</span></div>
+        <div><span class="pill mono">Timezone</span> Asia/Kolkata</div>
+        <div><span class="pill mono">Hour (24h)</span> <span id="hour" class="mono">—</span></div>
+        <div><span class="pill mono">Day of month</span> <span id="day" class="mono">—</span></div>
+      </div>
+      <div class="foot mono" id="updated">Updated: —</div>
+    </div>
+  </div>
+
+<script>
+function computeValue(){
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kolkata',
+    hour: '2-digit',
+    hour12: false,
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).formatToParts(new Date());
+
+  const hour = Number(parts.find(p => p.type === 'hour').value);
+  const day = Number(parts.find(p => p.type === 'day').value);
+
+  const left = 56 + (hour - 24);
+  const right = day + 5;
+  const value = String(left) + "KA" + String(right);
+
+  document.getElementById('result').textContent = value;
+  document.getElementById('hour').textContent = hour;
+  document.getElementById('day').textContent = day;
+
+  const ts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Kolkata',
+    dateStyle: 'medium',
+    timeStyle: 'medium',
+    hour12: false
+  }).format(new Date());
+  document.getElementById('updated').textContent = "Updated: " + ts;
+}
+
+// initial compute + refresh every minute
+computeValue();
+setInterval(computeValue, 60 * 1000);
+</script>
+</body>
+</html>
