@@ -22,7 +22,7 @@
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Computed Value</h1>
+      <h1>Flurn PW</h1>
       <div id="result" class="value mono">—</div>
       <div class="grid meta">
         <div><span class="pill mono">Formula</span> <span class="mono">56 + (hour−24) + "KA" + (day+5)</span></div>
@@ -48,9 +48,9 @@ function computeValue(){
   const hour = Number(parts.find(p => p.type === 'hour').value);
   const day = Number(parts.find(p => p.type === 'day').value);
 
-  const left = 56 + (hour - 24);
+  const left = 56 ;
   const right = day + 5;
-  const value = String(left) + "KA" + String(right);
+  const value = String(left) + String(hour) + "KA" + String(right);
 
   document.getElementById('result').textContent = value;
   document.getElementById('hour').textContent = hour;
